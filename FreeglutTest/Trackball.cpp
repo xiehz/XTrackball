@@ -73,8 +73,8 @@ void pan(float x, float y, float px, float py, float * t)
 	float dx = px - x;
 	float dy = py - y;
 
-	t[0] += dx *6 ;
-	t[1] += dy *6 ;
+	t[0] += dx  ;
+	t[1] += dy  ;
 	t[2] = 0;
 	t[3] = 1;
 }
@@ -93,7 +93,7 @@ void buildTranslateMatrix(float m[4][4], float * t)
 
 void scale(int delta, float px, float py, float * scale)
 {
-	float s = delta > 0 ? 0.0001f: -0.0001f;
+	float s = delta > 0 ? 0.01f: -0.01f;
 	scale[0] += s;
 	scale[1] += s;
 	scale[2] += s;
@@ -111,16 +111,20 @@ void buildScaleMatrix(float m[4][4], float * scale)
 	memcpy(temp, m, sizeof(float)* 16);
 
 	m[0][0] = temp[0][0] * scale[0];
-	m[0][1] = temp[0][1] * scale[1];
-	m[0][2] = temp[0][2] * scale[2];
+	m[0][1] = temp[0][1] * scale[0];
+	m[0][2] = temp[0][2] * scale[0];
+	m[0][3] = temp[0][3] * scale[0];
 
-	m[1][0] = temp[1][0] * scale[0];
+
+	m[1][0] = temp[1][0] * scale[1];
 	m[1][1] = temp[1][1] * scale[1];
-	m[1][2] = temp[1][2] * scale[2];
+	m[1][2] = temp[1][2] * scale[1];
+	m[1][3] = temp[1][3] * scale[1];
 
-	m[2][0] = temp[2][0] * scale[0];
-	m[2][1] = temp[2][1] * scale[1];
+	m[2][0] = temp[2][0] * scale[2];
+	m[2][1] = temp[2][1] * scale[2];
 	m[2][2] = temp[2][2] * scale[2];
+	m[2][3] = temp[2][3] * scale[2];
 }
 
 
@@ -356,8 +360,14 @@ static void normalize_quat(float q[4])
 * Build a rotation matrix, given a quaternion rotation.
 *
 */
-void build_rotmatrix(float m[4][4], float q[4])
+void build_rotmatrix(float mat[4][4], float q[4])
 {
+	//四元数转矩阵
+	float m[4][4];
+	m[0][0] = 1.0;	m[0][1] = 0.0;	m[0][2] = 0.0;	m[0][3] = 0.0;
+	m[1][0] = 0.0;	m[1][1] = 1.0;	m[1][2] = 0.0;	m[1][3] = 0.0;
+	m[2][0] = 0.0;	m[2][1] = 0.0;	m[2][2] = 1.0;	m[2][3] = 0.0;
+	m[3][0] = 0.0;	m[3][1] = 0.0;	m[3][2] = 0.0;	m[3][3] = 1.0;
 	m[0][0] = 1.0 - 2.0 * (q[1] * q[1] + q[2] * q[2]);
 	m[0][1] = 2.0 * (q[0] * q[1] - q[2] * q[3]);
 	m[0][2] = 2.0 * (q[2] * q[0] + q[1] * q[3]);
@@ -370,6 +380,17 @@ void build_rotmatrix(float m[4][4], float q[4])
 	m[2][1] = 2.0 * (q[1] * q[2] + q[0] * q[3]);
 	m[2][2] = 1.0 - 2.0 * (q[1] * q[1] + q[0] * q[0]);
 
+	float temp[4][4];
+	memcpy(temp, mat, sizeof(float) * 16);
+
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			mat[i][j] = m[i][0] * temp[0][j] + m[i][1] * temp[1][j] + m[i][2] * temp[2][j] + m[i][3]* temp[3][j] ;
+		}
+	}
+	
 }
 
 /* Fortran wrappers */
