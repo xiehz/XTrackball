@@ -30,12 +30,10 @@ void display()
 
 	buildTranslateMatrix(m, translate);
 	build_rotmatrix(m, cur);
-	buildTranslateMatrix(m, translate);
-	buildScaleMatrix(m, scales);
+	buildScale_tMatrix(m, scales);
 
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
-	glLoadIdentity();
 	glMultMatrixf(*m);
 
 	//glTranslatef(-5.0f, 0.0f, 0.0f);
@@ -91,7 +89,7 @@ void motion(int x, int y)
 
 	if (button_mark == 2)
 	{
-		scale(y > beginy? 1 : -1, p2x, p2y, scales);
+		scale_t(y > beginy? 1 : -1, p2x, p2y, scales);
 	}
 	else if(button_mark == 1){
 		pan(p1x, p1y, p2x, p2y, translate);
@@ -120,9 +118,12 @@ void reshape(int w, int h)
 	glLoadIdentity();
 
 	float aspect = w / h;
-	glOrtho(-aspect, aspect, -l, l, -l, l);
+	//glOrtho(-aspect, aspect, -l, l, 0.01, 10*l);
+
+	gluPerspective(30.0f, aspect, 0.01, 10.0 *l);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	gluLookAt(0.0f, 0.0f, 6.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 }
 
 

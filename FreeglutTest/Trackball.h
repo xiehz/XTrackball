@@ -110,4 +110,7 @@ extern void buildTranslateMatrix(float m[4][4],float* t);
 extern void scale(int delta, float px, float py, float* scale);
 extern void buildScaleMatrix(float m[4][4], float* scale);
 
+extern void scale_t(int delta, float px, float py, float * scale);
+
+extern void buildScale_tMatrix(float m[4][4], float* t);
 

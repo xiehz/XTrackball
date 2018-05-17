@@ -108,6 +108,36 @@ void scale(int delta, float px, float py, float * scale)
 		scale[2] = 0.0f;
 }
 
+void scale_t(int delta, float px, float py, float * scale)
+{
+	float s = delta > 0 ? 0.1 : -0.1;
+	static float vz[3] = { 0.0f, 0.0f, 1.0f };
+
+	scale[0] = 0;
+	scale[1] = 0;
+	scale[2] += s* py;
+}
+void buildScale_tMatrix(float mat[4][4], float* t)
+{
+	float temp[4][4];
+	memcpy(temp, mat, sizeof(float) * 16);
+
+	float m[4][4];
+	m[0][0] = 1.0;	m[0][1] = 0.0;	m[0][2] = 0.0;	m[0][3] = 0.0;
+	m[1][0] = 0.0;	m[1][1] = 1.0;	m[1][2] = 0.0;	m[1][3] = 0.0;
+	m[2][0] = 0.0;	m[2][1] = 0.0;	m[2][2] = 1.0;	m[2][3] = 0.0;
+	m[3][0] = t[0];	m[3][1] = t[1];	m[3][2] = t[2];	m[3][3] = 1.0;
+
+
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			mat[i][j] = m[i][0] * temp[0][j] + m[i][1] * temp[1][j] + m[i][2] * temp[2][j] + m[i][3] * temp[3][j];
+		}
+	}
+}
+
 void buildScaleMatrix(float m[4][4], float * scale)
 {
 	float temp[4][4];
