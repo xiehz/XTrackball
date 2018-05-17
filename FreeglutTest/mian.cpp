@@ -29,8 +29,9 @@ void display()
 	m[3][0] = 0.0;	m[3][1] = 0.0;	m[3][2] = 0.0;	m[3][3] = 1.0;
 
 	buildTranslateMatrix(m, translate);
-	buildScaleMatrix(m, scales);
 	build_rotmatrix(m, cur);
+	buildTranslateMatrix(m, translate);
+	buildScaleMatrix(m, scales);
 
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
@@ -110,7 +111,6 @@ void motion(int x, int y)
 
 void reshape(int w, int h)
 {
-
 	width = w;
 	height = h;
 	double l;
@@ -118,7 +118,9 @@ void reshape(int w, int h)
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(-l, l, -l, l, -l, l);
+
+	float aspect = w / h;
+	glOrtho(-aspect, aspect, -l, l, -l, l);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }

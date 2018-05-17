@@ -85,9 +85,12 @@ void buildTranslateMatrix(float m[4][4], float * t)
 	memcpy(temp, m, sizeof(float) * 16);
 
 
-	m[3][0] = temp[0][0] * t[0] + temp[1][0] * t[1] + temp[2][0] * t[2] + temp[3][0];
-	m[3][1] = temp[0][1] * t[0] + temp[1][1] * t[1] + temp[2][1] * t[2] + temp[3][1];
-	m[3][2] = temp[0][2] * t[0] + temp[1][2] * t[1] + temp[2][2] * t[2] + temp[3][2];
+	//m[3][0] = temp[0][0] * t[0] + temp[1][0] * t[1] + temp[2][0] * t[2] + temp[3][0];
+	//m[3][1] = temp[0][1] * t[0] + temp[1][1] * t[1] + temp[2][1] * t[2] + temp[3][1];
+	//m[3][2] = temp[0][2] * t[0] + temp[1][2] * t[1] + temp[2][2] * t[2] + temp[3][2];
+	m[3][0] = temp[3][0] + t[0];
+	m[3][1] = temp[3][1] + t[1];
+	m[3][2] = temp[3][2] + t[2];
 }
 
 
