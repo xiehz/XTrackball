@@ -110,12 +110,12 @@ void scale(int delta, float px, float py, float * scale)
 
 void scale_t(int delta, float px, float py, float * scale)
 {
-	float s = delta > 0 ? 0.1 : -0.1;
+
 	static float vz[3] = { 0.0f, 0.0f, 1.0f };
 
 	scale[0] = 0;
 	scale[1] = 0;
-	scale[2] += s* py;
+	scale[2] += 0.1* py;
 }
 void buildScale_tMatrix(float mat[4][4], float* t)
 {

@@ -17,7 +17,7 @@ float p2x;
 float p2y;
 
 float translate[4] = { 0.0f,0.0f,0.0f,0.0f };
-float scales[4] = { 1.0f,1.0f,1.0f,1.0f };
+float scales[4] = { 0.0f,0.0f,0.0f,0.0f };
 
 int button_mark;
 
